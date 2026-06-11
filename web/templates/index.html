@@ -434,10 +434,7 @@ Autorización: OK</textarea>
                         (Clave Pública)</button>
                     <button class="tab-btn" data-tab="enc-rsa-priv" style="--tab-color: var(--accent-orange)">Cifrar
                         (Clave Privada)</button>
-                    <button class="tab-btn" data-tab="enc-symmetric" style="--tab-color: var(--accent-orange)">Cifrado
-                        Simétrico</button>
-                    <button class="tab-btn" data-tab="enc-hybrid" style="--tab-color: var(--accent-orange)">Híbrido
-                        (RSA+AES)</button>
+
                 </div>
 
                 <!-- Tab: Generar Claves -->
@@ -549,81 +546,7 @@ Autorización: OK</textarea>
                     </div>
                 </div>
 
-                <!-- Tab: Symmetric -->
-                <div id="enc-symmetric" class="tab-panel">
-                    <div class="card">
-                        <div class="form-group">
-                            <label>Mensaje a Cifrar:</label>
-                            <textarea id="sym-msg"
-                                style="min-height: 60px;">Datos sensibles a proteger rápidamente.</textarea>
-                        </div>
 
-                        <div class="input-row">
-                            <div class="form-group">
-                                <label>Algoritmo Simétrico:</label>
-                                <select id="sym-algo">
-                                    <option value="aes-cbc">AES-256 (Modo CBC) - Recomendado</option>
-                                    <option value="des-cfb">Triple DES (Modo CFB)</option>
-                                    <option value="arc4">RC4 (ARC4) - Roto/Inseguro</option>
-                                </select>
-                            </div>
-                            <div class="form-group">
-                                <label>Clave (longitud según algoritmo):</label>
-                                <input type="text" id="sym-key" value="clave_secreta_de_32_bytes_aes!!!">
-                                <div id="sym-key-hint"
-                                    style="font-size: 0.7rem; color: var(--accent-cyan); margin-top: 4px;">AES requiere
-                                    16, 24 o 32 bytes</div>
-                            </div>
-                        </div>
-
-                        <div class="btn-group">
-                            <button id="btn-sym-enc" class="btn"
-                                style="background: var(--accent-orange); color: #fff;"><i class="fas fa-lock"></i>
-                                Cifrar Simétrico</button>
-                            <button id="btn-sym-dec" class="btn btn-outline"><i class="fas fa-unlock"></i> Descifrar
-                                Simétrico</button>
-                        </div>
-
-                        <div class="form-group" style="margin-top: 24px;">
-                            <label>Resultado:</label>
-                            <div id="sym-out" class="output-area"></div>
-                        </div>
-                        <!-- Hidden fields para almacenar IV -->
-                        <input type="hidden" id="sym-iv">
-                    </div>
-                </div>
-
-                <!-- Tab: Hybrid -->
-                <div id="enc-hybrid" class="tab-panel">
-                    <div class="card">
-                        <div class="card-title">Sobres Digitales (RSA + AES-GCM)</div>
-                        <p style="font-size: 0.8rem; color: var(--text-3); margin-bottom: 16px;">Cifra el mensaje con
-                            AES-256 y luego cifra la clave de AES usando RSA.</p>
-
-                        <div class="form-group">
-                            <label>Gran volumen de datos:</label>
-                            <textarea id="hyb-msg"
-                                style="min-height: 80px;">Este esquema híbrido combina la velocidad de la criptografía simétrica (AES) con la seguridad en la distribución de claves de la criptografía asimétrica (RSA). Es el estándar usado en TLS/SSL.</textarea>
-                        </div>
-
-                        <button id="btn-hyb-enc" class="btn" style="background: var(--accent-orange); color: #fff;"><i
-                                class="fas fa-envelope-open-text"></i> Crear Sobre Digital (Cifrar)</button>
-
-                        <div class="form-group" style="margin-top: 24px;">
-                            <label>Detalles del Sobre Digital:</label>
-                            <div id="hyb-out" class="output-area"></div>
-                        </div>
-
-                        <button id="btn-hyb-dec" class="btn btn-outline" style="margin-top: 10px;"><i
-                                class="fas fa-envelope"></i> Abrir Sobre (Descifrar)</button>
-
-                        <!-- Data del sobre -->
-                        <input type="hidden" id="hyb-sess-key">
-                        <input type="hidden" id="hyb-cipher">
-                        <input type="hidden" id="hyb-nonce">
-                        <input type="hidden" id="hyb-tag">
-                    </div>
-                </div>
             </section>
 
             <!-- SECTION: ELLIPTIC CURVES -->
