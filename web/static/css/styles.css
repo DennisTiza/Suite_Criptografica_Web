@@ -529,16 +529,6 @@ select option { background: var(--bg-1); }
 .key-dot.active { background: var(--accent-green); box-shadow: 0 0 6px var(--accent-green); }
 .key-dot.inactive { background: var(--text-3); }
 
-/* =============================================
-   AVALANCHE VISUALIZATION (Canvas)
-   ============================================= */
-#avalanche-canvas {
-  width: 100%;
-  height: 260px;
-  border-radius: var(--radius-sm);
-  background: rgba(0,0,0,0.3);
-  display: block;
-}
 
 /* =============================================
    ALERT / TOAST

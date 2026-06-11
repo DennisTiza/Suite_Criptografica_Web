@@ -43,6 +43,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (res.success) {
                 updateEccKeyStatus();
+                
+                const d = res.data;
+                const privInput = document.getElementById('ecdsa-keys-priv');
+                if (privInput) privInput.value = d.private_key_pem;
+                const pubInput = document.getElementById('ecdsa-keys-pub');
+                if (pubInput) pubInput.value = d.public_key_pem;
+                
                 out.className = "output-area";
                 out.textContent = `✅ Claves ECDSA generadas en la curva: ${res.data.curve}\n` +
                                   `Tamaño: ${res.data.key_size} bits\n\n` +
@@ -128,6 +135,13 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (res.success) {
                 updateEccKeyStatus();
+                
+                const d = res.data;
+                const privInput = document.getElementById('ed-keys-priv');
+                if (privInput) privInput.value = d.private_key_hex;
+                const pubInput = document.getElementById('ed-keys-pub');
+                if (pubInput) pubInput.value = d.public_key_hex;
+                
                 out.className = "output-area";
                 out.textContent = `✅ Claves Ed25519 generadas instantáneamente.\n\n` +
                                   `Clave Pública (Hex - 32 bytes):\n${res.data.public_key_hex}`;

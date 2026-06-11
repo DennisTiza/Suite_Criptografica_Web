@@ -42,6 +42,10 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (res.success) {
                 ui.showAlert('sig-keys-alert', `Par de claves RSA de ${size} bits generado exitosamente.`, 'success');
+                const txtPriv = document.getElementById('sig-keys-priv');
+                const txtPub = document.getElementById('sig-keys-pub');
+                if (txtPriv) txtPriv.value = res.data.private_key_pem;
+                if (txtPub) txtPub.value = res.data.public_key_pem;
                 updateKeyStatus();
             } else {
                 ui.showAlert('sig-keys-alert', `Error: ${res.error}`, 'error');
@@ -71,6 +75,8 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (res.success) {
                 ui.showAlert('sig-keys-alert', `Certificado auto-firmado generado. (Serial: ${res.data.serial_number})`, 'success');
+                const txtCert = document.getElementById('sig-cert-pem');
+                if (txtCert) txtCert.value = res.data.certificate_pem;
                 updateKeyStatus();
             } else {
                 ui.showAlert('sig-keys-alert', `Error: ${res.error} (¿Olvidaste generar claves primero?)`, 'error');
@@ -94,11 +100,7 @@ document.addEventListener('DOMContentLoaded', () => {
             
             if (res.success) {
                 out.value = res.data.signature_base64;
-                // Auto-fill verifier to make testing easy
-                const verifyMsg = document.getElementById('sig-verify-msg');
-                const verifySig = document.getElementById('sig-verify-sig');
-                if (verifyMsg) verifyMsg.value = msg;
-                if (verifySig) verifySig.value = res.data.signature_base64;
+
             } else {
                 out.value = `Error: ${res.error}\n\nNota: Debes generar claves primero en la pestaña "Claves y Certificado"`;
             }
@@ -131,80 +133,5 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
-    // --- 5. Textbook RSA (Educativo) ---
-    const btnTbSign = document.getElementById('btn-sig-tb-sign');
-    const btnTbVerify = document.getElementById('btn-sig-tb-verify');
-    
-    if (btnTbSign) {
-        btnTbSign.addEventListener('click', async () => {
-            const msg = document.getElementById('sig-tb-msg').value;
-            const hash = document.getElementById('sig-tb-hash').value;
-            const out = document.getElementById('sig-tb-out');
-            
-            if (!msg) return;
-            
-            ui.setLoading('btn-sig-tb-sign', true);
-            const res = await api.post('/api/signature/sign-textbook', { message: msg, hash_algorithm: hash });
-            ui.setLoading('btn-sig-tb-sign', false);
-            
-            if (res.success) {
-                const d = res.data;
-                // Guarda la firma en un dataset para verificación fácil
-                document.getElementById('sig-tb-msg').dataset.lastSig = d.signature_base64;
-                
-                out.className = "output-area";
-                out.innerHTML = `<span style="color:#ff8888">=== OPERACIÓN DE FIRMA ===</span>\n` +
-                                `M = Mensaje original\n` +
-                                `H = Hash(${d.hash_algorithm}, M)\n` +
-                                `  = <span style="color:#88bbff">${d.hash_int}</span>\n\n` +
-                                `Clave Privada (d, n)\n` +
-                                `Firma S = H^d mod n\n` +
-                                `  = <span style="color:#88ffbb">${d.signature_int}</span>\n\n` +
-                                `Firma Base64: ${d.signature_base64}`;
-            } else {
-                out.className = "output-area output-error";
-                out.textContent = `Error: ${res.error}`;
-            }
-        });
-    }
-    
-    if (btnTbVerify) {
-        btnTbVerify.addEventListener('click', async () => {
-            const msg = document.getElementById('sig-tb-msg').value;
-            const sigInput = document.getElementById('sig-tb-msg');
-            const sig = sigInput.dataset.lastSig; // Obtiene la última firma generada
-            const hash = document.getElementById('sig-tb-hash').value;
-            const out = document.getElementById('sig-tb-out');
-            
-            if (!sig) {
-                out.className = "output-area output-warning";
-                out.textContent = "Debes firmar un mensaje primero.";
-                return;
-            }
-            
-            ui.setLoading('btn-sig-tb-verify', true);
-            const res = await api.post('/api/signature/verify-textbook', { message: msg, signature_base64: sig, hash_algorithm: hash });
-            ui.setLoading('btn-sig-tb-verify', false);
-            
-            if (res.success) {
-                const d = res.data;
-                const statusColor = d.valid ? '#88ffbb' : '#ff8888';
-                
-                out.className = "output-area";
-                out.innerHTML = `<span style="color:#88bbff">=== OPERACIÓN DE VERIFICACIÓN ===</span>\n` +
-                                `Clave Pública (e, n)\n\n` +
-                                `Paso 1: Calcular Hash del mensaje proveído\n` +
-                                `H_orig = Hash(${d.hash_algorithm}, M)\n` +
-                                `       = <span style="color:#ccc">${d.hash_original}</span>\n\n` +
-                                `Paso 2: Recuperar Hash desde la Firma\n` +
-                                `H_recup = S^e mod n\n` +
-                                `        = <span style="color:${statusColor}">${d.hash_from_signature}</span>\n\n` +
-                                `Paso 3: Comparar H_orig == H_recup\n` +
-                                `<span style="color:${statusColor}; font-size:1.1em; font-weight:bold">${d.message}</span>`;
-            } else {
-                out.className = "output-area output-error";
-                out.textContent = `Error: ${res.error}`;
-            }
-        });
-    }
+
 });

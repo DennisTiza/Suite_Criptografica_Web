@@ -97,51 +97,7 @@ class MessageDigestLogic:
             'message_length': len(message)
         }
     
-    @staticmethod
-    def analyze_avalanche_effect(message: str, algorithm: str = 'sha256') -> Dict[str, any]:
-        """
-        Analizar el efecto avalancha cambiando un solo carácter del mensaje.
-        
-        Args:
-            message: Mensaje original
-            algorithm: Algoritmo de hash
-            
-        Returns:
-            Dict con análisis del efecto avalancha: {
-                'original_message': str,
-                'modified_message': str,
-                'original_hash': str,
-                'modified_hash': str,
-                'bits_changed': int,
-                'total_bits': int,
-                'percentage': float
-            }
-        """
-        if not message:
-            raise ValueError("El mensaje no puede estar vacío")
-        
-        # Hash del mensaje original
-        hash1 = hashlib.new(algorithm, message.encode('utf-8')).hexdigest()
-        
-        # Modificar último carácter
-        modified = message[:-1] + ('a' if message[-1] != 'a' else 'b')
-        hash2 = hashlib.new(algorithm, modified.encode('utf-8')).hexdigest()
-        
-        # Calcular diferencias en bits
-        diff_bits = bin(int(hash1, 16) ^ int(hash2, 16)).count('1')
-        total_bits = len(hash1) * 4  # 4 bits por carácter hexadecimal
-        percentage = (diff_bits / total_bits) * 100
-        
-        return {
-            'original_message': message,
-            'modified_message': modified,
-            'original_hash': hash1,
-            'modified_hash': hash2,
-            'bits_changed': diff_bits,
-            'total_bits': total_bits,
-            'percentage': percentage,
-            'algorithm': algorithm.upper()
-        }
+
     
     @staticmethod
     def compare_messages(message1: str, message2: str, 

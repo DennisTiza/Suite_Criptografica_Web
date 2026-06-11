@@ -157,9 +157,9 @@ class SqlInjectionLogic:
             r'"'  # Comillas dobles
         ]
 
-        # Verificar si hay patrones sospechosos en el username
+        # Verificar si hay patrones sospechosos en username o password
         for pattern in suspicious_patterns:
-            if re.search(pattern, username, re.IGNORECASE):
+            if re.search(pattern, username, re.IGNORECASE) or re.search(pattern, password, re.IGNORECASE):
                 # 4) Logging de Intentos de Ataque
                 mock_query = f"SELECT * FROM users WHERE username = '{username}' AND password = '***'"
                 self._log_attack(ip_address, "SQLi Attempt Blocked (Patrón Detectado)", mock_query)

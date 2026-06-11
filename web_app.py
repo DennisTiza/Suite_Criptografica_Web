@@ -42,6 +42,12 @@ _sqli_logic = SqlInjectionLogic()
 # ============================================================
 @app.route('/')
 def index():
+    global _digest_logic, _signature_logic, _encryption_logic, _curves_logic, _sqli_logic
+    _digest_logic = MessageDigestLogic()
+    _signature_logic = DigitalSignatureLogic()
+    _encryption_logic = EncryptionLogic()
+    _curves_logic = EllipticCurvesLogic()
+    _sqli_logic = SqlInjectionLogic()
     return render_template('index.html')
 
 
@@ -70,21 +76,6 @@ def digest_hmac():
         result = _digest_logic.generate_hmac(
             data.get('message', ''),
             data.get('key', ''),
-            data.get('algorithm', 'sha256')
-        )
-        return jsonify({'success': True, 'data': result})
-    except ValueError as e:
-        return jsonify({'success': False, 'error': str(e)}), 400
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-
-@app.route('/api/digest/avalanche', methods=['POST'])
-def digest_avalanche():
-    data = request.get_json()
-    try:
-        result = _digest_logic.analyze_avalanche_effect(
-            data.get('message', ''),
             data.get('algorithm', 'sha256')
         )
         return jsonify({'success': True, 'data': result})
@@ -168,37 +159,6 @@ def signature_verify():
         result = _signature_logic.verify_signature(
             data.get('message', ''),
             data.get('signature_base64', '')
-        )
-        return jsonify({'success': True, 'data': result})
-    except ValueError as e:
-        return jsonify({'success': False, 'error': str(e)}), 400
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-
-@app.route('/api/signature/sign-textbook', methods=['POST'])
-def signature_sign_textbook():
-    data = request.get_json()
-    try:
-        result = _signature_logic.sign_message_textbook(
-            data.get('message', ''),
-            data.get('hash_algorithm', 'SHA256')
-        )
-        return jsonify({'success': True, 'data': result})
-    except ValueError as e:
-        return jsonify({'success': False, 'error': str(e)}), 400
-    except Exception as e:
-        return jsonify({'success': False, 'error': str(e)}), 500
-
-
-@app.route('/api/signature/verify-textbook', methods=['POST'])
-def signature_verify_textbook():
-    data = request.get_json()
-    try:
-        result = _signature_logic.verify_signature_textbook(
-            data.get('message', ''),
-            data.get('signature_base64', ''),
-            data.get('hash_algorithm', 'SHA256')
         )
         return jsonify({'success': True, 'data': result})
     except ValueError as e:
@@ -327,25 +287,6 @@ def encryption_decrypt_public():
     except Exception as e:
         return jsonify({'success': False, 'error': str(e)}), 500
 
-
-@app.route('/api/encryption/des-ecb-encrypt', methods=['POST'])
-def encryption_des_ecb_encrypt():
-    data = request.get_json()
-    try:
-        result = _encryption_logic.encrypt_des_ecb(data.get('plaintext', ''), data.get('key', ''))
-        return jsonify({'success': True, 'data': result})
-    except ValueError as e:
-        return jsonify({'success': False, 'error': str(e)}), 400
-
-
-@app.route('/api/encryption/des-ecb-decrypt', methods=['POST'])
-def encryption_des_ecb_decrypt():
-    data = request.get_json()
-    try:
-        result = _encryption_logic.decrypt_des_ecb(data.get('ciphertext_base64', ''), data.get('key', ''))
-        return jsonify({'success': True, 'data': result})
-    except ValueError as e:
-        return jsonify({'success': False, 'error': str(e)}), 400
 
 
 @app.route('/api/encryption/des-cfb-encrypt', methods=['POST'])

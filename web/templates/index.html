@@ -128,7 +128,6 @@
             <section id="sec-digest" class="section">
                 <div class="page-header">
                     <div class="page-header-inner">
-                        <div class="page-icon">📝</div>
                         <div>
                             <h2 class="page-title" style="color: var(--accent-blue)">Message Digest</h2>
                             <p class="page-subtitle">Punto 1a - Funciones Hash Criptográficas</p>
@@ -141,8 +140,7 @@
                     <button class="tab-btn active" data-tab="digest-basic"
                         style="--tab-color: var(--accent-blue)">Generador Hash</button>
                     <button class="tab-btn" data-tab="digest-hmac" style="--tab-color: var(--accent-blue)">HMAC</button>
-                    <button class="tab-btn" data-tab="digest-avalanche" style="--tab-color: var(--accent-blue)">Efecto
-                        Avalancha</button>
+
                     <button class="tab-btn" data-tab="digest-compare"
                         style="--tab-color: var(--accent-blue)">Comparación</button>
                 </div>
@@ -222,25 +220,6 @@
                     </div>
                 </div>
 
-                <!-- Tab: Avalanche -->
-                <div id="digest-avalanche" class="tab-panel">
-                    <div class="card">
-                        <div class="form-group">
-                            <label>Mensaje Original:</label>
-                            <input type="text" id="avalanche-input" value="Hello World!">
-                            <p style="font-size: 0.75rem; color: var(--text-3); margin-top: 8px;">Un pequeño cambio en
-                                el mensaje producirá un cambio drástico en el hash.</p>
-                        </div>
-
-                        <button id="btn-analyze-avalanche" class="btn btn-primary"><i class="fas fa-search"></i>
-                            Analizar Efecto</button>
-
-                        <div class="form-group" style="margin-top: 24px;">
-                            <label>Visualización de Diferencias (SHA-256):</label>
-                            <canvas id="avalanche-canvas"></canvas>
-                        </div>
-                    </div>
-                </div>
 
                 <!-- Tab: Compare -->
                 <div id="digest-compare" class="tab-panel">
@@ -248,7 +227,7 @@
                         <div class="input-row">
                             <div class="form-group">
                                 <label>Mensaje 1:</label>
-                                <textarea id="compare-msg1">Mensaje para comparación</textarea>
+                                <textarea id="compare-msg1">Mensaje para comparacion</textarea>
                             </div>
                             <div class="form-group">
                                 <label>Mensaje 2:</label>
@@ -272,7 +251,6 @@
             <section id="sec-signature" class="section">
                 <div class="page-header">
                     <div class="page-header-inner">
-                        <div class="page-icon">✍️</div>
                         <div>
                             <h2 class="page-title" style="color: var(--accent-green)">Firma Digital RSA</h2>
                             <p class="page-subtitle">Punto 1b - Autenticación y No Repudio</p>
@@ -298,8 +276,7 @@
                         Firmar</button>
                     <button class="tab-btn" data-tab="sig-verify" style="--tab-color: var(--accent-green)">3.
                         Verificar</button>
-                    <button class="tab-btn" data-tab="sig-textbook" style="--tab-color: var(--accent-red)">RSA Textbook
-                        (Educativo)</button>
+
                 </div>
 
                 <!-- Tab: Keys -->
@@ -319,6 +296,19 @@
                         </div>
                         <button id="btn-sig-gen-keys" class="btn btn-success"><i class="fas fa-key"></i> Generar Nuevo
                             Par de Claves</button>
+
+                        <div class="form-group" style="margin-top: 15px; display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <label>Clave Privada (PEM):</label>
+                                <textarea id="sig-keys-priv" readonly
+                                    style="height: 150px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
+                            </div>
+                            <div style="flex: 1;">
+                                <label>Clave Pública (PEM):</label>
+                                <textarea id="sig-keys-pub" readonly
+                                    style="height: 150px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
+                            </div>
+                        </div>
 
                         <div class="divider"></div>
 
@@ -349,6 +339,12 @@
                         <button id="btn-sig-gen-cert" class="btn btn-outline"
                             style="border-color: var(--accent-green); color: var(--accent-green);"><i
                                 class="fas fa-certificate"></i> Generar Certificado</button>
+
+                        <div class="form-group" style="margin-top: 15px;">
+                            <label>Certificado (PEM):</label>
+                            <textarea id="sig-cert-pem" readonly
+                                style="height: 150px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
+                        </div>
 
                         <div id="sig-keys-alert" style="margin-top: 16px;"></div>
                     </div>
@@ -407,48 +403,12 @@ Autorización: OK</textarea>
                     </div>
                 </div>
 
-                <!-- Tab: Textbook -->
-                <div id="sig-textbook" class="tab-panel">
-                    <div class="card" style="border-color: rgba(255,68,68,0.3);">
-                        <div class="alert alert-warning">
-                            <strong>⚠️ PROPÓSITO EDUCATIVO:</strong> Esta implementación muestra la matemática pura de
-                            RSA sin el padding de seguridad (PSS/PKCS1v15). En un entorno real, es vulnerable.
-                        </div>
-
-                        <div class="input-row">
-                            <div class="form-group">
-                                <label>Mensaje:</label>
-                                <input type="text" id="sig-tb-msg" value="RSA math is cool">
-                            </div>
-                            <div class="form-group">
-                                <label>Hash:</label>
-                                <select id="sig-tb-hash">
-                                    <option value="SHA256">SHA-256</option>
-                                    <option value="SHA512">SHA-512</option>
-                                </select>
-                            </div>
-                        </div>
-
-                        <div class="btn-group">
-                            <button id="btn-sig-tb-sign" class="btn btn-danger"><i class="fas fa-square-root-alt"></i>
-                                Firmar (Textbook)</button>
-                            <button id="btn-sig-tb-verify" class="btn btn-outline"><i class="fas fa-check"></i>
-                                Verificar (Textbook)</button>
-                        </div>
-
-                        <div class="form-group" style="margin-top: 24px;">
-                            <label>Análisis Matemático:</label>
-                            <div id="sig-tb-out" class="output-area"></div>
-                        </div>
-                    </div>
-                </div>
             </section>
 
             <!-- SECTION: ENCRYPTION -->
             <section id="sec-encryption" class="section">
                 <div class="page-header">
                     <div class="page-header-inner">
-                        <div class="page-icon">🔐</div>
                         <div>
                             <h2 class="page-title" style="color: var(--accent-orange)">Cifrado RSA & Simétrico</h2>
                             <p class="page-subtitle">Punto 1c y 1d - Confidencialidad</p>
@@ -468,8 +428,10 @@ Autorización: OK</textarea>
                 </div>
 
                 <div class="tabs" id="tabs-encryption">
-                    <button class="tab-btn active" data-tab="enc-rsa-pub"
-                        style="--tab-color: var(--accent-orange)">Cifrar (Clave Pública)</button>
+                    <button class="tab-btn active" data-tab="enc-rsa-gen"
+                        style="--tab-color: var(--accent-orange)">Generar Claves</button>
+                    <button class="tab-btn" data-tab="enc-rsa-pub" style="--tab-color: var(--accent-orange)">Cifrar
+                        (Clave Pública)</button>
                     <button class="tab-btn" data-tab="enc-rsa-priv" style="--tab-color: var(--accent-orange)">Cifrar
                         (Clave Privada)</button>
                     <button class="tab-btn" data-tab="enc-symmetric" style="--tab-color: var(--accent-orange)">Cifrado
@@ -478,8 +440,48 @@ Autorización: OK</textarea>
                         (RSA+AES)</button>
                 </div>
 
+                <!-- Tab: Generar Claves -->
+                <div id="enc-rsa-gen" class="tab-panel active">
+                    <div class="card">
+                        <div class="card-title">Generación de Claves RSA</div>
+                        <p style="font-size: 0.8rem; color: var(--text-3); margin-bottom: 16px;">Paso 1: Genera el par
+                            de claves necesario para las operaciones de cifrado.</p>
+
+                        <div class="input-row">
+                            <div class="form-group">
+                                <label>Tamaño de Clave (bits):</label>
+                                <select id="enc-key-size">
+                                    <option value="1024">1024 (Rápido, Inseguro)</option>
+                                    <option value="2048" selected>2048 (Estándar)</option>
+                                    <option value="3072">3072 (Alta Seguridad)</option>
+                                    <option value="4096">4096 (Máxima Seguridad)</option>
+                                </select>
+                            </div>
+                            <div class="form-group" style="display: flex; align-items: flex-end; padding-bottom: 2px;">
+                                <button id="btn-enc-gen-keys" class="btn"
+                                    style="background: var(--accent-orange); color: #fff; width: 100%;"><i
+                                        class="fas fa-key"></i> Generar Claves RSA</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 15px; display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <label>Clave Privada (PEM):</label>
+                                <textarea id="enc-gen-priv" readonly
+                                    style="height: 150px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
+                            </div>
+                            <div style="flex: 1;">
+                                <label>Clave Pública (PEM):</label>
+                                <textarea id="enc-gen-pub" readonly
+                                    style="height: 150px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
+                            </div>
+                        </div>
+                        <div id="enc-gen-alert" style="margin-top: 16px;"></div>
+                    </div>
+                </div>
+
                 <!-- Tab: RSA Public (Standard Encryption) -->
-                <div id="enc-rsa-pub" class="tab-panel active">
+                <div id="enc-rsa-pub" class="tab-panel">
                     <div class="card">
                         <div class="card-title">Punto 1d: Cifrar con Clave Pública (Confidencialidad)</div>
                         <p style="font-size: 0.8rem; color: var(--text-3); margin-bottom: 16px;">Usa OAEP Padding. Solo
@@ -496,11 +498,22 @@ Autorización: OK</textarea>
 
                         <div class="form-group" style="margin-top: 20px;">
                             <label>Texto Cifrado (Base64):</label>
-                            <textarea id="enc-pub-cipher"
+                            <textarea id="enc-pub-cipher" readonly
                                 style="color: var(--accent-orange); background: rgba(255,107,53,0.05);"></textarea>
                         </div>
 
-                        <button id="btn-enc-pub-dec" class="btn btn-outline"><i class="fas fa-unlock"></i> Descifrar con
+                        <div class="divider"></div>
+
+                        <div class="card-title" style="margin-top: 20px;">Descifrar con Clave Privada</div>
+                        <div class="form-group">
+                            <label>Introducir Texto Cifrado (Base64):</label>
+                            <textarea id="enc-pub-cipher-input"
+                                placeholder="Pega aquí el texto cifrado en Base64..."></textarea>
+                        </div>
+
+                        <button id="btn-enc-pub-dec" class="btn btn-outline"
+                            style="border-color: var(--accent-orange); color: var(--accent-orange);"><i
+                                class="fas fa-unlock"></i> Descifrar con
                             Privada</button>
 
                         <div id="enc-pub-alert" style="margin-top: 16px;"></div>
@@ -551,7 +564,6 @@ Autorización: OK</textarea>
                                 <select id="sym-algo">
                                     <option value="aes-cbc">AES-256 (Modo CBC) - Recomendado</option>
                                     <option value="des-cfb">Triple DES (Modo CFB)</option>
-                                    <option value="des-ecb">Triple DES (Modo ECB) - Inseguro</option>
                                     <option value="arc4">RC4 (ARC4) - Roto/Inseguro</option>
                                 </select>
                             </div>
@@ -618,7 +630,6 @@ Autorización: OK</textarea>
             <section id="sec-curves" class="section">
                 <div class="page-header">
                     <div class="page-header-inner">
-                        <div class="page-icon">📈</div>
                         <div>
                             <h2 class="page-title" style="color: var(--accent-cyan)">Curvas Elípticas (ECC)</h2>
                             <p class="page-subtitle">Punto 1e - Criptografía Moderna y Eficiente</p>
@@ -656,6 +667,19 @@ Autorización: OK</textarea>
                                 <button id="btn-ecdsa-gen" class="btn"
                                     style="background: var(--accent-cyan); color: #000; width: 100%;"><i
                                         class="fas fa-key"></i> Generar Claves ECDSA</button>
+                            </div>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 15px; display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <label>Clave Privada (PEM):</label>
+                                <textarea id="ecdsa-keys-priv" readonly
+                                    style="height: 120px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
+                            </div>
+                            <div style="flex: 1;">
+                                <label>Clave Pública (PEM):</label>
+                                <textarea id="ecdsa-keys-pub" readonly
+                                    style="height: 120px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
                             </div>
                         </div>
 
@@ -704,6 +728,19 @@ Autorización: OK</textarea>
                                 determinista, altamente seguro y extremadamente rápido.</p>
                         </div>
 
+                        <div class="form-group" style="margin-top: 15px; display: flex; gap: 10px;">
+                            <div style="flex: 1;">
+                                <label>Clave Privada (Hex):</label>
+                                <textarea id="ed-keys-priv" readonly
+                                    style="height: 80px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
+                            </div>
+                            <div style="flex: 1;">
+                                <label>Clave Pública (Hex):</label>
+                                <textarea id="ed-keys-pub" readonly
+                                    style="height: 80px; font-family: monospace; font-size: 0.75rem; background: rgba(0,0,0,0.05); color: var(--text-2);"></textarea>
+                            </div>
+                        </div>
+
                         <div class="divider"></div>
 
                         <div class="form-group" style="margin-top: 20px;">
@@ -733,7 +770,6 @@ Autorización: OK</textarea>
             <section id="sec-sqli" class="section">
                 <div class="page-header">
                     <div class="page-header-inner">
-                        <div class="page-icon">💉</div>
                         <div>
                             <h2 class="page-title" style="color: var(--accent-red)">SQL Injection</h2>
                             <p class="page-subtitle">Punto 2 - Vulnerabilidades y Contramedidas de Bases de Datos</p>

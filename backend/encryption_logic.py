@@ -460,83 +460,7 @@ class EncryptionLogic:
     
     # ==================== CIFRADO SIMÉTRICO (DES, AES, ARC4) ====================
     
-    def encrypt_des_ecb(self, plaintext: str, key: str) -> Dict:
-        """
-        Cifrar con DES en modo ECB.
-        
-        ⚠️ INSEGURO - Solo fines educativos
-        
-        Args:
-            plaintext: Texto a cifrar (debe ser múltiplo de 8 bytes)
-            key: Clave de 8 bytes exactos
-            
-        Returns:
-            Dict con ciphertext_base64, ciphertext_hex, method, warning
-        """
-        try:
-            if len(key) != 8:
-                raise ValueError("La clave DES debe tener exactamente 8 bytes")
-            
-            # Padding manual si es necesario
-            plaintext_bytes = plaintext.encode('utf-8')
-            padding_length = 8 - (len(plaintext_bytes) % 8)
-            if padding_length != 8:
-                plaintext_bytes += bytes([padding_length] * padding_length)
-            
-            cipher = Cipher(
-                algorithms.TripleDES(key.encode('utf-8')),  # Usar 3DES para compatibilidad
-                modes.ECB(),
-                backend=default_backend()
-            )
-            encryptor = cipher.encryptor()
-            ciphertext = encryptor.update(plaintext_bytes) + encryptor.finalize()
-            
-            return {
-                'ciphertext_base64': base64.b64encode(ciphertext).decode('utf-8'),
-                'ciphertext_hex': ciphertext.hex(),
-                'method': 'DES-ECB',
-                'warning': '⚠️ INSEGURO - Solo para demostración educativa',
-                'note': 'Modo ECB expone patrones. Sin vector de inicialización.'
-            }
-        except Exception as e:
-            raise ValueError(f"Error en cifrado DES-ECB: {str(e)}")
-    
-    def decrypt_des_ecb(self, ciphertext_base64: str, key: str) -> Dict:
-        """
-        Descifrar DES-ECB.
-        
-        Args:
-            ciphertext_base64: Texto cifrado en base64
-            key: Clave de 8 bytes
-            
-        Returns:
-            Dict con plaintext, method
-        """
-        try:
-            if len(key) != 8:
-                raise ValueError("La clave DES debe tener exactamente 8 bytes")
-            
-            ciphertext = base64.b64decode(ciphertext_base64)
-            
-            cipher = Cipher(
-                algorithms.TripleDES(key.encode('utf-8')),
-                modes.ECB(),
-                backend=default_backend()
-            )
-            decryptor = cipher.decryptor()
-            plaintext_padded = decryptor.update(ciphertext) + decryptor.finalize()
-            
-            # Quitar padding
-            padding_length = plaintext_padded[-1]
-            plaintext = plaintext_padded[:-padding_length].decode('utf-8')
-            
-            return {
-                'plaintext': plaintext,
-                'method': 'DES-ECB',
-                'message': 'Descifrado exitoso'
-            }
-        except Exception as e:
-            raise ValueError(f"Error en descifrado DES-ECB: {str(e)}")
+
     
     def encrypt_des_cfb(self, plaintext: str, key: str, iv: bytes = None) -> Dict:
         """
@@ -806,10 +730,10 @@ class EncryptionLogic:
             tag = encryptor.tag
             
             return {
-                'encrypted_session_key_base64': base64.b64encode(encrypted_session_key).decode('utf-8'),
-                'ciphertext_base64': base64.b64encode(ciphertext).decode('utf-8'),
-                'nonce_base64': base64.b64encode(nonce).decode('utf-8'),
-                'tag_base64': base64.b64encode(tag).decode('utf-8'),
+                'encrypted_session_key_b64': base64.b64encode(encrypted_session_key).decode('utf-8'),
+                'ciphertext_b64': base64.b64encode(ciphertext).decode('utf-8'),
+                'nonce_b64': base64.b64encode(nonce).decode('utf-8'),
+                'tag_b64': base64.b64encode(tag).decode('utf-8'),
                 'method': 'Híbrido: RSA-OAEP + AES-256-GCM',
                 'note': 'Clave de sesión AES cifrada con RSA, datos cifrados con AES'
             }
